@@ -17,20 +17,31 @@ html,body{margin:0;padding:0;height:100%;overflow:hidden;background:#d9c39a;touc
 #vignette.on{opacity:1}
 
 /* HUD */
-#hud{position:fixed;inset:0;pointer-events:none;z-index:10;text-shadow:0 1px 3px rgba(20,12,4,.55)}
-.stat{display:flex;align-items:baseline;gap:.7em;padding:.25em 0 .3em;border-bottom:1px solid rgba(233,216,180,.45)}
+#hud{position:fixed;inset:0;pointer-events:none;z-index:10;text-shadow:0 1px 2px rgba(15,8,2,.9)}
+.scrim{position:absolute;left:0;right:0;pointer-events:none;z-index:0}
+.scrimTop{top:0;height:clamp(64px,11vmin,110px);background:linear-gradient(180deg,rgba(22,14,6,.62) 0%,rgba(22,14,6,0) 100%)}
+.scrimBottom{bottom:0;height:clamp(48px,8vmin,84px);background:linear-gradient(0deg,rgba(22,14,6,.66) 0%,rgba(22,14,6,0) 100%)}
+#hudLeft,#hudRight,#hint,#diveBtn{z-index:1}
+.stat{display:flex;align-items:baseline;gap:.7em;padding:.25em 0 .3em;border-bottom:1px solid rgba(241,227,194,.55)}
 #hudLeft{position:absolute;top:clamp(10px,2.4vmin,22px);left:clamp(12px,3vmin,28px);display:flex;flex-direction:column;gap:.45em;align-items:stretch;min-width:clamp(110px,18vmin,170px);font-size:clamp(15px,2.8vmin,24px)}
 #hudRight{position:absolute;top:clamp(10px,2.4vmin,22px);right:clamp(12px,3vmin,28px);min-width:clamp(90px,14vmin,140px);justify-content:flex-end;font-size:clamp(15px,2.8vmin,24px)}
-.lbl{flex:1;font-size:.5em;letter-spacing:.32em;text-transform:uppercase;color:#cdb894;opacity:.9}
-#len,#score,#best{display:inline-block;min-width:1.5em;text-align:right;font-weight:300;letter-spacing:.06em;color:#f2e4c4;font-variant-numeric:tabular-nums;transform-origin:center}
-#hint{position:absolute;bottom:clamp(8px,1.8vmin,16px);left:50%;transform:translateX(-50%);font-size:clamp(9px,1.4vmin,12px);letter-spacing:.22em;text-transform:uppercase;white-space:pre;max-width:94vw;overflow:hidden;text-overflow:ellipsis;opacity:.5;color:#e9d8b4}
+.lbl{flex:1;font-size:.5em;letter-spacing:.32em;text-transform:uppercase;color:#f1e3c2;opacity:.85}
+#len,#score,#best{display:inline-block;min-width:1.5em;text-align:right;font-size:1.12em;font-weight:400;letter-spacing:.06em;color:#f1e3c2;font-variant-numeric:tabular-nums;transform-origin:center}
+#hint{position:absolute;bottom:clamp(8px,1.8vmin,16px);left:50%;transform:translateX(-50%);font-size:clamp(12px,1.6vmin,14px);letter-spacing:.2em;text-transform:uppercase;white-space:pre;max-width:94vw;overflow:hidden;text-overflow:ellipsis;opacity:.92;color:#f1e3c2;text-shadow:0 1px 2px rgba(15,8,2,.9)}
 body.touch #hint{max-width:calc(100vw - 2 * (84px + clamp(14px,3.5vmin,30px)) - 16px)}
 .pop{animation:pop .3s ease-out}
 @keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.45)}100%{transform:scale(1)}}
 
+/* Lives */
+#lives{display:inline-flex;align-items:center;gap:10px;padding-right:3px;height:1em}
+.life{display:inline-block;width:12px;height:12px;transform:rotate(45deg);border:1px solid #f1e3c2;background:#f1e3c2;box-shadow:0 1px 2px rgba(15,8,2,.8);transition:background .25s,opacity .25s}
+.life.lost{background:transparent;opacity:.35}
+#lives.hit{animation:livesHit .45s ease-out}
+@keyframes livesHit{0%{transform:translateX(0);opacity:1}15%{transform:translateX(-4px);opacity:.3}30%{transform:translateX(4px);opacity:1}45%{transform:translateX(-3px);opacity:.3}60%{transform:translateX(3px);opacity:1}80%{transform:translateX(-1px)}100%{transform:translateX(0);opacity:1}}
+
 /* Status line */
-#status{position:fixed;left:50%;top:clamp(54px,9vmin,90px);transform:translateX(-50%);z-index:11;pointer-events:none;font-size:clamp(11px,1.9vmin,16px);letter-spacing:.5em;padding-left:.5em;text-transform:uppercase;color:#e9d8b4;white-space:nowrap;text-shadow:0 1px 3px rgba(20,12,4,.6);opacity:0;transition:opacity .35s ease}
-#status.on{opacity:.9}
+#status{position:fixed;left:50%;top:clamp(54px,9vmin,90px);transform:translateX(-50%);z-index:11;pointer-events:none;font-size:clamp(11px,1.9vmin,16px);letter-spacing:.5em;padding-left:.5em;text-transform:uppercase;color:#f1e3c2;white-space:nowrap;text-shadow:0 1px 2px rgba(15,8,2,.9);background:rgba(22,14,6,.45);border:1px solid rgba(241,227,194,.3);padding:.35em .6em .35em 1.1em;opacity:0;transition:opacity .35s ease}
+#status.on{opacity:1}
 
 /* Touch burrow button (inside #hud) */
 #diveBtn{display:none;position:absolute;right:clamp(14px,3.5vmin,30px);bottom:clamp(14px,3.5vmin,30px);width:84px;height:84px;border-radius:50%;border:1px solid rgba(233,216,180,.75);background:rgba(25,16,8,.35);color:#e9d8b4;align-items:center;justify-content:center;font-size:11px;letter-spacing:.28em;padding-left:.28em;text-transform:uppercase;pointer-events:auto;touch-action:none;-webkit-user-select:none;user-select:none;transition:background .15s,color .15s,border-color .15s}
@@ -42,11 +53,17 @@ body.touch #diveBtn{display:flex}
 #flash.on{animation:flash .35s ease-out}
 @keyframes flash{0%{opacity:.28}100%{opacity:0}}
 
+/* Damage flash */
+#hurt{position:fixed;inset:0;pointer-events:none;opacity:0;z-index:19;background:radial-gradient(ellipse at center,rgba(120,20,10,0) 35%,rgba(120,20,10,.3) 65%,rgba(120,20,10,.55) 100%)}
+#hurt.on{animation:hurt .6s ease-out}
+@keyframes hurt{0%{opacity:1}100%{opacity:0}}
+
 /* Floaters */
 #floaters{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:15}
 .floater{position:absolute;transform:translate(-50%,-50%);font-weight:300;font-size:clamp(14px,2.6vmin,22px);letter-spacing:.12em;color:#f2e4c4;white-space:nowrap;text-shadow:0 1px 3px rgba(20,12,4,.6);animation:floatUp .9s ease-out forwards}
 .floater.gold{font-size:clamp(20px,4vmin,34px);letter-spacing:.18em;color:#f3dc9e;text-shadow:0 1px 4px rgba(20,12,4,.65)}
 .floater.combo{font-size:clamp(22px,4.6vmin,40px);letter-spacing:.4em;text-transform:uppercase;color:#f0d896;text-shadow:0 1px 4px rgba(20,12,4,.7)}
+.floater.bad{font-size:clamp(16px,3vmin,26px);letter-spacing:.3em;text-transform:uppercase;color:#e2664a;text-shadow:0 1px 3px rgba(15,8,2,.85)}
 @keyframes floatUp{0%{opacity:0;margin-top:0}12%{opacity:1}100%{opacity:0;margin-top:-60px}}
 
 /* Off-screen food arrow: thin chevron pointing +X */
@@ -54,21 +71,36 @@ body.touch #diveBtn{display:flex}
 #arrow::before{content:"";position:absolute;left:5px;top:7px;width:13px;height:13px;border-top:2px solid #f2e4c4;border-right:2px solid #f2e4c4;transform:rotate(45deg)}
 
 /* Overlays */
-.overlay{position:fixed;inset:0;z-index:30;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:4vmin;animation:fadeIn .5s ease-out}
+.overlay{position:fixed;inset:0;z-index:30;display:flex;flex-direction:column;align-items:center;justify-content:center;justify-content:safe center;text-align:center;padding:clamp(12px,3vmin,32px) 4vmin;overflow-y:auto;color:#f1e3c2;animation:fadeIn .5s ease-out}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-#startScreen{cursor:pointer;background:linear-gradient(180deg,rgba(20,14,8,.72) 0%,rgba(40,27,14,.55) 55%,rgba(60,40,20,.35) 100%)}
-#title{margin:0;padding:clamp(12px,2.6vmin,26px) 0 clamp(12px,2.6vmin,26px) .5em;border-top:1px solid rgba(233,216,180,.5);border-bottom:1px solid rgba(233,216,180,.5);font-weight:300;font-size:clamp(22px,min(9vmin,7vw),96px);letter-spacing:.5em;line-height:1;color:#e9d8b4;white-space:nowrap;text-shadow:0 1px 6px rgba(10,6,2,.35)}
-#tagline{margin:clamp(14px,3vmin,28px) 0 clamp(18px,4vmin,36px);font-size:clamp(11px,2vmin,16px);letter-spacing:.3em;text-transform:uppercase;color:#cdb894}
-#controls{list-style:none;margin:0 0 clamp(18px,4.5vmin,40px);padding:0;font-size:clamp(11px,1.9vmin,15px);line-height:2;text-align:left;letter-spacing:.08em;color:#e9d8b4}
-#controls li{border-bottom:1px solid rgba(233,216,180,.14)}
-#controls b{display:inline-block;min-width:7em;font-weight:400;font-size:.85em;letter-spacing:.3em;text-transform:uppercase;color:#cdb894}
+#startScreen{cursor:pointer;background:linear-gradient(180deg,rgba(20,14,8,.78) 0%,rgba(40,27,14,.66) 55%,rgba(60,40,20,.5) 100%)}
+#title{margin:0;flex-shrink:0;padding:clamp(10px,2.2vmin,24px) 0 clamp(10px,2.2vmin,24px) .5em;border-top:1px solid rgba(233,216,180,.5);border-bottom:1px solid rgba(233,216,180,.5);font-weight:300;font-size:clamp(22px,min(8.5vmin,7vw),96px);letter-spacing:.5em;line-height:1;color:#f1e3c2;white-space:nowrap;text-shadow:0 1px 6px rgba(10,6,2,.35)}
+#tagline{margin:clamp(10px,2.4vmin,26px) 0 clamp(12px,3vmin,32px);font-size:clamp(11px,2vmin,16px);letter-spacing:.3em;text-transform:uppercase;color:#f1e3c2;opacity:.88}
+#controls{list-style:none;margin:0 0 clamp(14px,3.4vmin,36px);padding:0;max-width:min(94vw,44em);font-size:clamp(11px,1.9vmin,15px);line-height:1.8;text-align:left;letter-spacing:.08em;color:#f1e3c2}
+#controls li{border-bottom:1px solid rgba(241,227,194,.16)}
+#controls b{display:inline-block;min-width:7em;font-weight:400;font-size:.85em;letter-spacing:.3em;text-transform:uppercase;color:#f1e3c2;opacity:.85}
 #controls .sep{display:inline-block;width:1.6em}
-#controls .tip{border-bottom:0;margin-top:.6em;text-align:center;font-style:italic;color:#cdb894;opacity:.85}
-#startBtn{font-size:clamp(12px,2.2vmin,18px);font-weight:300;letter-spacing:.45em;padding:.9em 2.2em .9em 2.65em;border:1px solid rgba(233,216,180,.7);color:#e9d8b4;background:transparent;text-transform:uppercase;animation:pulse 2.6s ease-in-out infinite;cursor:pointer}
+#controls .tip{border-bottom:0;margin-top:.4em;text-align:center;font-style:italic;color:#f1e3c2;opacity:.88}
+#controls .rule{line-height:1.5;padding:.28em 0;opacity:.92}
+#controls .tip + .rule{margin-top:.5em;border-top:1px solid rgba(241,227,194,.35)}
+#controls .rule em{font-style:normal;color:#e2664a}
+#startBtn{font-size:clamp(12px,2.2vmin,18px);font-weight:300;letter-spacing:.45em;padding:.9em 2.2em .9em 2.65em;border:1px solid rgba(241,227,194,.75);color:#f1e3c2;background:transparent;text-transform:uppercase;animation:pulse 2.6s ease-in-out infinite;cursor:pointer;flex-shrink:0}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
-#pauseScreen{cursor:pointer;background:linear-gradient(180deg,rgba(20,14,8,.72) 0%,rgba(60,40,20,.35) 100%)}
-#pauseScreen h2{margin:0;padding:.4em 0 .4em .5em;border-top:1px solid rgba(233,216,180,.5);border-bottom:1px solid rgba(233,216,180,.5);font-weight:300;font-size:clamp(26px,7vmin,64px);letter-spacing:.5em;text-transform:uppercase;color:#e9d8b4}
-#pauseScreen p{margin-top:1.6em;font-size:clamp(11px,2vmin,16px);letter-spacing:.3em;text-transform:uppercase;color:#cdb894}
+#pauseScreen{cursor:pointer;background:linear-gradient(180deg,rgba(20,14,8,.78) 0%,rgba(60,40,20,.5) 100%)}
+#pauseScreen h2{margin:0;padding:.4em 0 .4em .5em;border-top:1px solid rgba(233,216,180,.5);border-bottom:1px solid rgba(233,216,180,.5);font-weight:300;font-size:clamp(26px,7vmin,64px);letter-spacing:.5em;text-transform:uppercase;color:#f1e3c2}
+#pauseScreen p{margin-top:1.6em;font-size:clamp(11px,2vmin,16px);letter-spacing:.3em;text-transform:uppercase;color:#f1e3c2;opacity:.88}
+
+/* Game over */
+#gameOverScreen{cursor:pointer;background:linear-gradient(180deg,rgba(20,14,8,.82) 0%,rgba(40,20,12,.66) 55%,rgba(60,30,18,.5) 100%)}
+#gameOverScreen h2{margin:0;flex-shrink:0;padding:.5em 0 .5em .45em;border-top:1px solid rgba(241,227,194,.5);border-bottom:1px solid rgba(241,227,194,.5);font-weight:300;font-size:clamp(18px,min(5.6vmin,5vw),56px);letter-spacing:.45em;line-height:1;text-transform:uppercase;white-space:nowrap;color:#f1e3c2;text-shadow:0 1px 6px rgba(10,6,2,.4)}
+.goStats{margin:clamp(16px,3.6vmin,36px) 0 clamp(8px,1.6vmin,16px);min-width:clamp(200px,32vmin,300px);font-size:clamp(14px,2.6vmin,22px)}
+.goStats .stat{border-bottom-color:rgba(241,227,194,.3)}
+.goStats .lbl{opacity:.88}
+#goScore,#goLength,#goBest{font-weight:400;letter-spacing:.06em;font-variant-numeric:tabular-nums;color:#f1e3c2}
+#goNew{margin:.2em 0 0;font-size:clamp(11px,1.9vmin,15px);letter-spacing:.5em;padding-left:.5em;text-transform:uppercase;color:#f3dc9e;animation:pulse 1.8s ease-in-out infinite}
+#goBtn{margin-top:clamp(18px,4vmin,40px);flex-shrink:0;font-size:clamp(12px,2.2vmin,18px);font-weight:300;letter-spacing:.45em;padding:.9em 2.2em .9em 2.65em;border:1px solid rgba(241,227,194,.75);color:#f1e3c2;text-transform:uppercase;cursor:pointer;transition:background .2s,color .2s}
+#goBtn:hover{background:rgba(241,227,194,.88);color:#2a1c0e}
+.goKeys{margin-top:1.2em;font-size:clamp(10px,1.6vmin,13px);letter-spacing:.3em;text-transform:uppercase;color:#f1e3c2;opacity:.85}
 #errorScreen{z-index:50;background:rgba(20,14,8,.94);color:#e9d8b4}
 #errorScreen h2{margin:0 0 1em;font-weight:300;letter-spacing:.2em;text-transform:uppercase;color:#e8b08a}
 #errorText{max-width:90vw;max-height:60vh;overflow:auto;white-space:pre-wrap;word-break:break-word;text-align:left;font:13px/1.45 Consolas,"Courier New",monospace;background:#120c06;border:1px solid rgba(233,216,180,.25);padding:12px;color:#f2e4c4;-webkit-user-select:text;user-select:text}
@@ -80,9 +112,12 @@ body.touch #diveBtn{display:flex}
 <div id="vignette"></div>
 
 <div id="hud" class="hidden">
+  <div class="scrim scrimTop"></div>
+  <div class="scrim scrimBottom"></div>
   <div id="hudLeft">
     <div class="stat"><span class="lbl">Length</span><span id="len">8</span></div>
     <div class="stat"><span class="lbl">Score</span><span id="score">0</span></div>
+    <div class="stat"><span class="lbl">Lives</span><span id="lives"><i class="life"></i><i class="life"></i><i class="life"></i></span></div>
   </div>
   <div id="hudRight" class="stat"><span class="lbl">Best</span><span id="best">0</span></div>
   <div id="hint">A/D · mouse — steer   SPACE — burrow   W — boost   P — pause   R — restart</div>
@@ -91,6 +126,7 @@ body.touch #diveBtn{display:flex}
 
 <div id="status"></div>
 <div id="flash"></div>
+<div id="hurt"></div>
 <div id="floaters"></div>
 <div id="arrow"></div>
 
@@ -103,6 +139,9 @@ body.touch #diveBtn{display:flex}
     <li><b>Boost</b> W / ↑ / Shift<span class="sep"></span><b>Slow</b> S / ↓</li>
     <li><b>Pause</b> Esc / P<span class="sep"></span><b>Restart</b> R</li>
     <li class="tip">Breach beneath a scarab for a ×2 devour bonus.</li>
+    <li class="rule">Blue &amp; amber scarabs — devour to grow.</li>
+    <li class="rule">Black thorn-crystals with a <em>red glow</em> — never swallow them: each costs a life. You have three.</li>
+    <li class="rule">Burrow beneath thorns to pass safely.</li>
   </ul>
   <div id="startBtn">Click to play</div>
 </div>
@@ -110,6 +149,18 @@ body.touch #diveBtn{display:flex}
 <div id="pauseScreen" class="overlay hidden">
   <h2>Paused</h2>
   <p>Click or press P to resume</p>
+</div>
+
+<div id="gameOverScreen" class="overlay hidden">
+  <h2>THE DESERT TAKES YOU</h2>
+  <div class="goStats">
+    <div class="stat"><span class="lbl">Score</span><span id="goScore">0</span></div>
+    <div class="stat"><span class="lbl">Length</span><span id="goLength">0</span></div>
+    <div class="stat"><span class="lbl">Best</span><span id="goBest">0</span></div>
+  </div>
+  <div id="goNew" class="hidden">NEW BEST</div>
+  <div id="goBtn">RIDE AGAIN</div>
+  <div class="goKeys">Click · Enter · R</div>
 </div>
 
 <div id="errorScreen" class="overlay hidden">
@@ -13242,11 +13293,11 @@ var DWPhysics = (function () {
     GROW_INTERVAL: 0.12,
     ROCK_COUNT: 8,
     CACTUS_COUNT: 0,
-    HF_RES: 200,
+    HF_RES: 256,
     FIXED_DT: 1 / 60,
     MAX_SUBSTEPS: 3,
-    SPAWN_FLAT_INNER: 14,
-    SPAWN_FLAT_OUTER: 50,
+    SPAWN_FLAT_INNER: 10,
+    SPAWN_FLAT_OUTER: 36,
     PROP_MIN_DIST: 276,
     PROP_MAX_DIST: 305,
     ROCK_MIN_RADIUS: 5,
@@ -13257,8 +13308,8 @@ var DWPhysics = (function () {
     SEG_MASS: 1,
     SEED: 1337,
     // terrain coloring hint (approx measured range of heightAt)
-    HEIGHT_MIN: -1.2,
-    HEIGHT_MAX: 23,
+    HEIGHT_MIN: -1.7,
+    HEIGHT_MAX: 41.2,
     heightRange: null,    // {min, max} filled below
     WIND_X: 0.8,          // prevailing wind (dune crests run perpendicular)
     WIND_Z: 0.6,
@@ -13271,7 +13322,8 @@ var DWPhysics = (function () {
     UNDER_ENTER_OFFSET: -0.15, // segment target offset below this => under-mode
     BREACH_OFFSET: -0.3,
     SEG_EXIT_OFFSET: -0.05,  // underground segment re-enables collision once (nearly) clear
-    UNDER_VY_MAX: 13         // absolute vertical speed limit for underground bodies
+    UNDER_VY_MAX: 13,
+    SINK_WAVE_SPEED: 50         // absolute vertical speed limit for underground bodies
   };
   CONFIG.heightRange = { min: CONFIG.HEIGHT_MIN, max: CONFIG.HEIGHT_MAX };
 
@@ -13282,60 +13334,77 @@ var DWPhysics = (function () {
   }
 
   // ---- Dune terrain ----
-  // Transverse dune ridges: crests perpendicular to the wind (WIND_X, WIND_Z).
-  // u = along-wind coordinate, v = along-crest coordinate. A ridge period of
-  // DUNE_L in (warped) u: gentle windward ramp of length DUNE_LW, sharp (slightly
-  // rounded) crest, steep lee ramp of length DUNE_L - DUNE_LW, both ramps easing
-  // into a broad flat basin. Crest height varies along v. Secondary dunes run
-  // along the wind (gradient ~perpendicular to the main slopes), damped near crests.
-  var DUNE_L = 160, DUNE_LW = 102, DUNE_LL = DUNE_L - DUNE_LW;
-  var RAMP_B = 0.35, RAMP_K = 1 / (1 - RAMP_B / 2);
-  var CREST_C = 4;  // crest rounding half-width
+  // Large transverse dune ridges: crests perpendicular to the wind (WIND_X, WIND_Z).
+  // u = along-wind coordinate, v = along-crest coordinate (meandering via warpU).
+  // One period of DUNE_L in warped u, phase s in [0, DUNE_L), s = 0 at the crest,
+  // increasing downwind:
+  //   lee/slip face: planar at slope DUNE_KLEE from the crest down, short concave
+  //     foot (parabola over DUNE_FOOT) into the basin
+  //   basin floor: flat (secondary dunes only), width varies with crest height
+  //   windward face: long concave-up ramp of length Lw (zero slope at the basin,
+  //     steepening toward the crest, max ~0.45-0.49)
+  //   crest: kink rounded by a parabola within +-DUNE_CREST_C (sharp ridgeline)
+  // Crest height H varies along v. Lee length scales with H (constant slip angle).
+  var DUNE_L = 175, DUNE_KLEE = 0.73, DUNE_FOOT = 8, DUNE_CREST_C = 2;
   var DUNE_PHASE = 0, SPAWN_H = 0;
-  var SPAWN_HS = 0.65, SPAWN_ATT_R0 = 25, SPAWN_ATT_R = 140;
-  // ramp: 0 at t=0 with zero slope (eased over RAMP_B), linear to 1 at t=1
-  function ramp(t) {
-    if (t < RAMP_B) { var q = t / RAMP_B; return RAMP_K * RAMP_B * q * q * q * (1 - 0.5 * q); }
-    return RAMP_K * (t - RAMP_B * 0.5);
-  }
   function warpU(u, v) {
-    return u + 20 * Math.sin(0.0105 * v + 0.5 * Math.sin(0.004 * u)) +
-      6 * Math.sin(0.023 * v + 0.006 * u + 1.7) + 6 * Math.sin(0.0105 * u + 0.4);
+    return u + 18 * Math.sin(0.008 * v + 0.5 * Math.sin(0.004 * u)) +
+      5 * Math.sin(0.018 * v + 0.005 * u + 1.7) + 3 * Math.sin(0.0105 * u + 0.4);
   }
-  function rawHeight(x, z, hs) {
+  function duneH(u, v) {
+    return 37.5 + 2.8 * Math.sin(0.0095 * v - 1.5707963) + 1.2 * Math.sin(0.021 * v + 0.007 * u - 1.5707963);
+  }
+  function windLen(H) { return 96 + 1.2 * (H - 32); }
+  // windward shape: w(0)=0, w'(0)=0, w(1)=1, w' = (1-(1-t)^4)/0.8 (concave up, max 1.25)
+  function windW(t) { var q = 1 - t, q2 = q * q; return (t + (q2 * q2 * q - 1) * 0.2) * 1.25; }
+  function rawHeight(x, z) {
     var u = CONFIG.WIND_X * x + CONFIG.WIND_Z * z;
     var v = -CONFIG.WIND_Z * x + CONFIG.WIND_X * z;
-    var uw = warpU(u, v) + DUNE_PHASE;
-    var s = uw - DUNE_L * Math.floor(uw / DUNE_L); // 0 = basin, DUNE_LW = crest
-    var H = hs * (20 + 2.5 * Math.sin(0.0095 * v + 1.1) + 1.2 * Math.sin(0.021 * v + 0.007 * u));
-    var P, d = s - DUNE_LW;
-    if (d < 0) P = ramp(s / DUNE_LW);
-    else P = ramp((DUNE_L - s) / DUNE_LL);
-    if (d > -CREST_C && d < CREST_C) {
-      // round the crest kink: replace |d| by a parabola within CREST_C
-      var b = 0.5 * RAMP_K * (1 / DUNE_LW + 1 / DUNE_LL);
-      var ad = d < 0 ? -d : d;
-      P -= b * ((d * d / CREST_C + CREST_C) * 0.5 - ad);
+    // warped along-wind coordinate (inline warpU) and |grad uw| so the slip face
+    // has the same true slope everywhere regardless of the meander
+    var a1 = 0.008 * v + 0.5 * Math.sin(0.004 * u), a2 = 0.018 * v + 0.005 * u + 1.7, a3 = 0.0105 * u + 0.4;
+    var c1 = Math.cos(a1), c2 = Math.cos(a2);
+    var uw = u + 18 * Math.sin(a1) + 5 * Math.sin(a2) + 3 * Math.sin(a3) + DUNE_PHASE;
+    var gu = 1 + 0.036 * c1 * Math.cos(0.004 * u) + 0.025 * c2 + 0.0315 * Math.cos(a3);
+    var gv = 0.144 * c1 + 0.09 * c2;
+    var g = Math.sqrt(gu * gu + gv * gv);
+    var s = uw - DUNE_L * Math.floor(uw / DUNE_L);
+    var H = duneH(u, v), k = DUNE_KLEE / g, F = DUNE_FOOT, c = DUNE_CREST_C;
+    var Llee = H / k, Lw = windLen(H), h = 0;
+    if (s < Llee + 0.5 * F) {
+      var y = Llee - s; // distance up the lee face from where it meets the basin
+      if (y >= 0.5 * F) h = k * y;
+      else { var yf = y + 0.5 * F; h = k * yf * yf / (2 * F); }
     }
-    var m = 1 - P; m *= m;
-    var sec = 1.2 * m * Math.sin(0.157 * v + 0.9 * Math.sin(0.03 * u)) * (0.7 + 0.3 * Math.sin(0.045 * u + 0.8));
-    return H * P + sec;
+    if (s > DUNE_L - Lw) {
+      var hw = H * windW((s - (DUNE_L - Lw)) / Lw);
+      if (hw > h) h = hw;
+    }
+    var d = s < c ? s : s > DUNE_L - c ? s - DUNE_L : c;
+    if (d < c) {
+      // round the crest kink: replace |d| by a parabola within +-c
+      var b = 0.5 * (H * 1.25 / Lw + k);
+      var ad = d < 0 ? -d : d;
+      h -= b * ((d * d / c + c) * 0.5 - ad);
+    }
+    var m = 1 - h / H;
+    var sec = 1.6 * m * Math.sin(0.11 * v + 0.9 * Math.sin(0.03 * u)) * (0.7 + 0.3 * Math.sin(0.045 * u + 0.8));
+    return h + sec;
   }
-  // place the spawn slightly windward of a basin centre, pad at local height
-  DUNE_PHASE = 12 - warpU(0, 0);
-  SPAWN_H = rawHeight(0, 0, SPAWN_HS);
+  // spawn: origin at the downwind edge of a (wide) basin floor where the windward
+  // ramp starts; the slip face of the previous ridge rises ~26 units upwind
+  (function () {
+    var H0 = duneH(0, 0);
+    DUNE_PHASE = (DUNE_L - windLen(H0) + 3) - warpU(0, 0);
+    SPAWN_H = rawHeight(0, 0);
+  })();
 
   function heightAt(x, z) {
     var r2 = x * x + z * z, ro = CONFIG.SPAWN_FLAT_OUTER;
-    if (r2 >= SPAWN_ATT_R * SPAWN_ATT_R) return rawHeight(x, z, 1);
+    if (r2 >= ro * ro) return rawHeight(x, z);
     var r = Math.sqrt(r2);
-    // dunes around spawn are lower (keeps the pad blend within slope limits)
-    var h = rawHeight(x, z, SPAWN_HS + (1 - SPAWN_HS) * smoothstep(SPAWN_ATT_R0, SPAWN_ATT_R, r));
-    if (r < ro) {
-      var bl = smoothstep(CONFIG.SPAWN_FLAT_INNER, ro, r);
-      h = SPAWN_H + (h - SPAWN_H) * bl;
-    }
-    return h;
+    if (r <= CONFIG.SPAWN_FLAT_INNER) return SPAWN_H;
+    return SPAWN_H + (rawHeight(x, z) - SPAWN_H) * smoothstep(CONFIG.SPAWN_FLAT_INNER, ro, r);
   }
 
   // Terrain vertical rate (dh/dt) for horizontal velocity (vx,vz) at (x,z), using a
@@ -13345,6 +13414,13 @@ var DWPhysics = (function () {
     var sp2 = vx * vx + vz * vz;
     if (sp2 < 1e-6) return 0;
     return (heightAt(x + vx * LOOK_T, z + vz * LOOK_T) - h) / LOOK_T;
+  }
+  // Extra vertical centre height of a sphere of radius r resting on the local
+  // slope (r/cos - r): offsets are measured vertically, so on a 0.75 slip face a
+  // resting sphere sits ~0.25 r "above" the surface.
+  function slopeLift(x, z, h, r) {
+    var gx = (heightAt(x + 0.5, z) - h) * 2, gz = (heightAt(x, z + 0.5) - h) * 2;
+    return r * (Math.sqrt(1 + gx * gx + gz * gz) - 1);
   }
   // Max upward speed for a surface body: what the slope ahead needs plus margin.
   function climbCap(x, z, h, vx, vz) {
@@ -13460,6 +13536,7 @@ var DWPhysics = (function () {
       // burrowing
       mode: 'surface', headDepth: 0, submerged: 0,
       diveImpact: 0, breachImpact: 0, lastBreachTime: -1e9,
+      fullySubmerged: false, exposed: 0,
       _debugNoBounds: false // test-only: disable boundary steering/clamp
     };
     var acc = 0, growTimer = 0, airTime = 0, stuckTime = 0, avoidTime = 0, avoidDir = 0;
@@ -13468,6 +13545,11 @@ var DWPhysics = (function () {
     var histArc = new Float64Array(HIST_N), histOff = new Float64Array(HIST_N);
     var histHead = -1, histCount = 0, arcLen = 0, lastHX = 0, lastHZ = 0;
     var wentUnder = false, breachTimer = 0;
+    // sink front: sweeps backward along the recorded path from the dive point,
+    // retroactively lowering history so the whole body sinks where it lies
+    var sinkActive = false, sinkFront = 0, sinkPrevFront = 0, sinkDiveArc = 0;
+    var sinkRef = 0, sinkRefOn = false, prevDiving = false;
+    var SINK_RAMP = 5;
     var GRAV = Math.abs(C.GRAVITY), MASK_ON = G_GROUND | G_PROP;
 
     function histClear(hx, hz) {
@@ -13498,6 +13580,46 @@ var DWPhysics = (function () {
       var a0 = histArc[i0], a1 = histArc[i1];
       var t = a1 > a0 ? (a - a0) / (a1 - a0) : 1;
       return histOff[i0] + (histOff[i1] - histOff[i0]) * t;
+    }
+    function smooth01(t) { return t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t); }
+    function histLowerRange(a0, a1, fn) {
+      if (histCount === 0) return;
+      var oldest = (histHead - histCount + 1 + HIST_N) % HIST_N;
+      // binary search first logical index with arc >= a0
+      var lo = 0, hi = histCount;
+      while (lo < hi) {
+        var mid = (lo + hi) >> 1;
+        if (histArc[(oldest + mid) % HIST_N] < a0) lo = mid + 1; else hi = mid;
+      }
+      for (var k = lo; k < histCount; k++) {
+        var ix = (oldest + k) % HIST_N, a = histArc[ix];
+        if (a > a1) break;
+        var t = fn(a);
+        if (t < histOff[ix]) histOff[ix] = t;
+      }
+    }
+    function sinkStart() {
+      sinkActive = true; sinkDiveArc = arcLen; sinkFront = arcLen; sinkPrevFront = arcLen;
+    }
+    function sinkClear() { sinkActive = false; sinkRefOn = false; prevDiving = false; }
+    var fwdLen = Math.max(3, 2 * C.SEG_SPACING);
+    function sinkBack(a) {
+      return -C.BURROW_DEPTH * (a >= sinkFront ? 1 : smooth01((a - (sinkFront - SINK_RAMP)) / SINK_RAMP));
+    }
+    function sinkFwd(a) { return -C.BURROW_DEPTH * smooth01((sinkRef - a) / fwdLen); }
+    function sinkUpdate(dt) {
+      var diving = wentUnder && (sim.mode === 'diving' || sim.mode === 'under');
+      if (diving && !prevDiving && sinkRefOn) sinkStart(); // re-dive after emerging
+      prevDiving = diving;
+      if (diving) { sinkRef = arcLen; sinkRefOn = true; }
+      if (sinkRefOn) histLowerRange(sinkRef - fwdLen - 1, sinkRef, sinkFwd);
+      if (sinkActive) {
+        var bodyArc = (sim.segments.length - 1) * C.SEG_SPACING;
+        sinkPrevFront = sinkFront;
+        sinkFront -= Math.max(C.SINK_WAVE_SPEED, bodyArc / 0.9) * dt;
+        histLowerRange(sinkFront - SINK_RAMP, Math.min(sinkDiveArc, sinkPrevFront) + 1e-6, sinkBack);
+        if (sinkFront - SINK_RAMP < arcLen - bodyArc - 2 * C.SEG_SPACING) sinkActive = false;
+      }
     }
     function setUnder(seg, under) {
       if (seg.under === under) return;
@@ -13562,6 +13684,7 @@ var DWPhysics = (function () {
       sim.mode = 'surface'; sim.headDepth = 0; sim.submerged = 0;
       sim.diveImpact = 0; sim.breachImpact = 0; sim.lastBreachTime = -1e9;
       wentUnder = false; breachTimer = 0;
+      sinkClear();
     }
 
     sim.reset = function () {
@@ -13725,12 +13848,18 @@ var DWPhysics = (function () {
           servoUnder(head, hoff, -C.BURROW_DEPTH, hff, 0, 2.2, 12, vDn, vUpMax, dt);
         }
       } else {
-        var clearance = hp.y - hh - C.HEAD_RADIUS;
+        var clearance = hp.y - hh - C.HEAD_RADIUS - slopeLift(hp.x, hp.z, hh, C.HEAD_RADIUS);
         if (breachTimer > 0) breachTimer -= dt; // free ballistic burst after a breach
         else {
           // slope-aware climb cap: allow the vertical speed the terrain ahead needs
-          var vyCap = climbCap(hp.x, hp.z, hh, hv.x, hv.z);
+          var vyCap = climbCap(hp.x, hp.z, hh, tvx, tvz);
           if (hv.y > vyCap) hv.y = vyCap;
+          // slope assist: when in contact, supply the vertical speed the face ahead
+          // needs so the ground contact doesn't have to bleed horizontal speed
+          if (clearance < 0.3) {
+            var need = terrainRate(hp.x, hp.z, hh, tvx, tvz);
+            if (need > hv.y) hv.y = need + GRAV * dt;
+          }
           if (clearance > 0.1) head.force.y -= head.mass * 12; // downforce to hug dunes
         }
       }
@@ -13766,6 +13895,10 @@ var DWPhysics = (function () {
         } else {
           var bCap = climbCap(b.position.x, b.position.z, bh, b.velocity.x, b.velocity.z) + 1;
           if (b.velocity.y > bCap) b.velocity.y = bCap;
+          if (off < 0.3 + slopeLift(b.position.x, b.position.z, bh, sg.radius)) {
+            var bNeed = terrainRate(b.position.x, b.position.z, bh, b.velocity.x, b.velocity.z);
+            if (bNeed > b.velocity.y) b.velocity.y += (bNeed - b.velocity.y) * Math.min(1, 20 * dt);
+          }
           if (off > 0.1) b.force.y -= b.mass * 8;
         }
       }
@@ -13795,6 +13928,7 @@ var DWPhysics = (function () {
         if (!wentUnder && ho < C.BREACH_OFFSET) {
           wentUnder = true;
           sim.diveImpact = Math.max(0.5, -hv.y);
+          sinkStart();
         }
         if (Math.abs(ho + C.BURROW_DEPTH) < 0.5) sim.mode = 'under';
       } else if (sim.mode === 'emerging' && ho > C.BREACH_OFFSET) {
@@ -13811,13 +13945,21 @@ var DWPhysics = (function () {
         wentUnder = false;
       }
       histPush(sim.mode === 'surface' ? Math.max(0, ho) : ho);
+      sinkUpdate(dt);
+      var fsub = true, nexp = 0;
+      for (var j2 = 0; j2 < segs.length; j2++) {
+        var sj2 = segs[j2];
+        if (!sj2.under || !(sj2.offset < -(sj2.radius + 0.6))) fsub = false;
+        if (sj2.offset > -(sj2.radius + 0.2)) nexp++;
+      }
+      sim.fullySubmerged = fsub; sim.exposed = nexp;
       sim.headDepth = Math.max(0, -ho);
       sim.submerged = under / segs.length;
 
       if (hseg.under) {
         sim.headGrounded = false; airTime = 0; stuckTime = 0;
       } else {
-        var grounded = ho < 0.25;
+        var grounded = ho - slopeLift(hp.x, hp.z, heightAt(hp.x, hp.z), C.HEAD_RADIUS) < 0.5;
         if (grounded) {
           if (!sim.headGrounded && airTime >= 0.2) sim.landImpact = Math.max(0, -vyBefore);
           airTime = 0;
@@ -13947,8 +14089,20 @@ var DWGame = {};
 
   // Bright hazy cream-white horizon haze (fog, background and sky-dome horizon all use it).
   var FOG_COLOR = 0xe6d9bd;
-  // Direction TOWARD the sun: harsh white sun high in the sky (~56 deg elevation).
-  var SUN_DIR = new THREE.Vector3(-0.45, 0.82, -0.36).normalize();
+  // Prevailing wind (unit, downwind) from physics CONFIG at module init; fallback (0.8, 0.6).
+  var WIND = (function () {
+    var C = (typeof DWPhysics !== 'undefined' && DWPhysics && DWPhysics.CONFIG) || {};
+    var x = typeof C.WIND_X === 'number' ? C.WIND_X : 0.8, z = typeof C.WIND_Z === 'number' ? C.WIND_Z : 0.6;
+    var l = Math.sqrt(x * x + z * z);
+    if (!(l > 1e-6)) { x = 0.8; z = 0.6; l = 1; }
+    return { x: x / l, z: z / l };
+  })();
+  // Direction TOWARD the sun: low (~30 deg) sun on the WINDWARD side, so steep lee/slip faces
+  // (which face +wind) fall into shadow and crests read as crisp light/dark edges. Rotated ~25 deg
+  // in azimuth off the wind axis so ridges are not lit perfectly flat-on.
+  var SUN_ELEV = 30 * Math.PI / 180, SUN_AZ_OFF = 25 * Math.PI / 180;
+  var SUN_DIR = new THREE.Vector3(-WIND.x, 0, -WIND.z).applyAxisAngle(new THREE.Vector3(0, 1, 0), SUN_AZ_OFF);
+  SUN_DIR.set(SUN_DIR.x * Math.cos(SUN_ELEV), Math.sin(SUN_ELEV), SUN_DIR.z * Math.cos(SUN_ELEV)).normalize();
   // Second, smaller and dimmer sun (sprite only): SUN_DIR rotated ~12 deg about the world Y axis.
   var SUN2_DIR = SUN_DIR.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), 0.38).normalize();
 
@@ -13998,6 +14152,7 @@ var DWGame = {};
         midColor: { value: new THREE.Color(0xc9d3cf) },
         horizonColor: { value: new THREE.Color(FOG_COLOR) },
         sunColor: { value: new THREE.Color(0xfffaf0) },
+        warmColor: { value: new THREE.Color(0xf6e2b8) },
         sunDir: { value: SUN_DIR.clone() }
       },
       vertexShader: [
@@ -14009,7 +14164,7 @@ var DWGame = {};
       ].join('\n'),
       fragmentShader: [
         'uniform vec3 topColor; uniform vec3 midColor; uniform vec3 horizonColor;',
-        'uniform vec3 sunColor; uniform vec3 sunDir;',
+        'uniform vec3 sunColor; uniform vec3 sunDir; uniform vec3 warmColor;',
         'varying vec3 vDir;',
         'void main(){',
         '  vec3 d = normalize(vDir);',
@@ -14018,6 +14173,11 @@ var DWGame = {};
         // thick bleached haze band at the horizon, pale desaturated blue only high up
         '  vec3 col = mix(horizonColor, midColor, smoothstep(0.0, 0.32, h));',
         '  col = mix(col, topColor, smoothstep(0.22, 0.95, h));',
+        // slightly warmer/brighter low band toward the sun azimuth; zero exactly at the horizon so
+        // it still meets the fogged terrain (FOG_COLOR) without a seam
+        '  float az = max(dot(normalize(d.xz + vec2(1e-5)), normalize(sunDir.xz + vec2(1e-5))), 0.0);',
+        '  float band = pow(az, 3.0) * smoothstep(0.0, 0.035, h) * (1.0 - smoothstep(0.05, 0.3, h));',
+        '  col = mix(col, warmColor, band * 0.5);',
         // white-hot halo around the high sun + broad scattering glare
         '  col = mix(col, sunColor, clamp(pow(s, 48.0) * 0.6 + pow(s, 8.0) * 0.22 + pow(s, 2.0) * 0.08, 0.0, 1.0));',
         '  if (h < 0.0) col = horizonColor;',
@@ -14069,28 +14229,51 @@ var DWGame = {};
   }
 
   // Sand palette (THREE.Color hex -> linear working space, as vertex colors expect).
-  var C_BASE = new THREE.Color(0xd8c08e), C_CREST = new THREE.Color(0xead8ae),
-    C_BASIN = new THREE.Color(0xc2a473), C_LEE = new THREE.Color(0xb39566);
-  // Returns colorFn(x, y, z, n, outColor). wind: unit {x,z} downwind direction or null.
+  // Pale spice-gold (not orange): windward mid-tone, upper-slope lift, slip face a notch darker and
+  // warmer, thin bright crest highlight, slightly greyer/paler dusty basins.
+  var C_BASE = new THREE.Color(0xd6bd8b), C_HIGH = new THREE.Color(0xe2cc9c),
+    C_BASIN = new THREE.Color(0xd0bf9e), C_LEE = new THREE.Color(0xb99a69), C_CREST = new THREE.Color(0xf3e6c4);
+  // Returns colorFn(x, y, z, n, outColor) (n = unit normal from the heightfield). wind: unit {x,z}
+  // downwind direction. colorFn.stats counts {n, lee, crest} classified vertices (weight > 0.5).
   function sandColorizer(hmin, hmax, wind) {
-    var span = Math.max(hmax - hmin, 1e-3);
-    return function (x, y, z, n, out) {
+    var span = Math.max(hmax - hmin, 1e-3), heightAt = DWPhysics.heightAt;
+    var wx = wind.x, wz = wind.z, CREST_STEP = 4, CREST_DROP = 0.6;
+    var stats = { n: 0, lee: 0, crest: 0 };
+    function fn(x, y, z, n, out) {
       var t = U.clamp((y - hmin) / span, 0, 1);
+      var sh = Math.sqrt(n.x * n.x + n.z * n.z);            // sin(slope angle)
+      var ndw = n.x * wx + n.z * wz;                        // >0: faces downwind (lee)
+      // (c) windward ramps / base: mid-tone, slightly lighter up-slope
       out.copy(C_BASE);
-      out.lerp(C_BASIN, (1 - smooth01(0.0, 0.45, t)) * 0.85);
-      var sun = U.clamp((n.x * SUN_DIR.x + n.y * SUN_DIR.y + n.z * SUN_DIR.z) * 1.15, 0, 1);
-      out.lerp(C_CREST, smooth01(0.55, 0.97, t) * (0.55 + 0.45 * sun));
-      // thin darker band just below sharp crests on the lee (slip) face
-      var sh = Math.sqrt(n.x * n.x + n.z * n.z);
-      var lee = smooth01(0.3, 0.5, sh) * smooth01(0.6, 0.88, t) * (1 - smooth01(0.95, 1.0, t));
-      if (wind) lee *= smooth01(0.2, 0.8, (n.x * wind.x + n.z * wind.z) / Math.max(sh, 1e-4));
-      else lee *= 0.5;
-      out.lerp(C_LEE, lee * 0.6);
+      out.lerp(C_HIGH, smooth01(0.35, 0.95, t) * 0.6);
+      // (d) basins: greyer, paler, dusty (flat + low)
+      var basin = (1 - smooth01(0.05, 0.35, t)) * (1 - smooth01(0.12, 0.3, sh));
+      out.lerp(C_BASIN, basin * 0.8);
+      // streaks along the wind on windward slopes: low-frequency noise stretched along wind
+      var a = x * wx + z * wz, c = -x * wz + z * wx;
+      var st = Math.sin(c * 0.11 + 1.6 * Math.sin(a * 0.011 + c * 0.004)) * 0.55 +
+        Math.sin(c * 0.29 + a * 0.017 + 2.1) * 0.3 + Math.sin(c * 0.047 - a * 0.006 + 0.7) * 0.15;
+      var windward = smooth01(0.02, 0.15, -ndw) * (1 - basin * 0.5);
+      out.multiplyScalar(1 + st * 0.045 * windward);
+      // (a) lee / slip faces: steep and facing downwind -> darker, warmer
+      var lee = smooth01(0.18, 0.32, ndw) * smooth01(0.25, 0.45, sh);
+      out.lerp(C_LEE, lee * 0.85);
+      // (b) thin crest highlight: local max along the wind axis (both neighbours clearly lower)
+      var crest = 0;
+      if (t > 0.3) {
+        var d1 = y - heightAt(x - wx * CREST_STEP, z - wz * CREST_STEP);
+        var d2 = y - heightAt(x + wx * CREST_STEP, z + wz * CREST_STEP);
+        crest = smooth01(CREST_DROP * 0.6, CREST_DROP * 1.6, Math.min(d1, d2)) * smooth01(0.3, 0.6, t);
+        out.lerp(C_CREST, crest * 0.75);
+      }
       // subtle large-scale tonal variation
       var v = Math.sin(x * 0.0105 + z * 0.0061) * 0.5 + Math.sin(z * 0.0128 - x * 0.0071 + 1.3) * 0.5;
-      out.multiplyScalar(1 + v * 0.035);
+      out.multiplyScalar(1 + v * 0.03);
+      stats.n++; if (lee > 0.5) stats.lee++; if (crest > 0.5) stats.crest++;
       return out;
-    };
+    }
+    fn.stats = stats;
+    return fn;
   }
 
   // Patch MeshStandardMaterial so the ripple map fades out with view distance (far sand smooth).
@@ -14124,7 +14307,6 @@ var DWGame = {};
       var ix = i % (N + 1), iz = Math.floor(i / (N + 1));
       var x = ix * es - half, z = iz * es - half, y = heightAt(x, z);
       p.setXYZ(i, x, y, z);
-      uv.setXY(i, x / RIPPLE_TILE, z / RIPPLE_TILE);
       if (y < hmin) hmin = y;
       if (y > hmax) hmax = y;
     }
@@ -14147,6 +14329,13 @@ var DWGame = {};
       var cl = Math.sqrt(C.WIND_X * C.WIND_X + C.WIND_Z * C.WIND_Z);
       wind = { x: C.WIND_X / cl, z: C.WIND_Z / cl };
     } else if (wsum > 0 && wl / wsum > 0.3) wind = { x: wx / wl, z: wz / wl };
+    else wind = { x: WIND.x, z: WIND.z };
+    // Ripple UVs in wind frame: the texture's ripples vary along v, so v runs along the wind ->
+    // ripple crests lie across the wind (transverse, like the dunes).
+    for (i = 0; i < p.count; i++) {
+      var px = parr[i * 3], pz = parr[i * 3 + 2];
+      uv.setXY(i, (-px * wind.z + pz * wind.x) / RIPPLE_TILE, (px * wind.x + pz * wind.z) / RIPPLE_TILE);
+    }
     var colorFn = sandColorizer(hmin, hmax, wind);
     var cols = new Float32Array(p.count * 3);
     for (i = 0; i < p.count; i++) {
@@ -14156,6 +14345,7 @@ var DWGame = {};
     }
     geo.setAttribute('color', new THREE.BufferAttribute(cols, 3));
     geo.computeBoundingSphere(); geo.computeBoundingBox();
+    var colorStats = { n: colorFn.stats.n, lee: colorFn.stats.lee, crest: colorFn.stats.crest }; // main terrain only
 
     var mat = new THREE.MeshStandardMaterial({
       color: 0xffffff, map: sandTex, vertexColors: true, roughness: 1, metalness: 0
@@ -14209,12 +14399,14 @@ var DWGame = {};
     skirt.castShadow = false;
     skirt.receiveShadow = false;
     scene.add(skirt);
-    return { mesh: mesh, skirt: skirt, material: mat, skirtMaterial: skirtMat, heightMin: hmin, heightMax: hmax, wind: wind };
+    return { mesh: mesh, skirt: skirt, material: mat, skirtMaterial: skirtMat, heightMin: hmin, heightMax: hmax, wind: wind,
+      colorStats: colorStats };
   }
 
-  // Shadow frustum: +-SHADOW_HALF around the focus; light sits SHADOW_DIST along SUN_DIR
-  // (far = 520 covers 30-unit dunes well below/behind the focus).
-  var SHADOW_HALF = 70, SHADOW_DIST = 260;
+  // Shadow frustum: +-SHADOW_HALF (dune scale) around the focus; light sits SHADOW_DIST along
+  // SUN_DIR. At 30 deg elevation the ground inside the +-130 box spans ~+-225 in light depth, plus
+  // ~46-unit crests: near 1 / far 900 (i.e. -399..+500 around the focus) contains every caster.
+  var SHADOW_HALF = 130, SHADOW_DIST = 400, SHADOW_FAR = 900;
 
   G.SUN_DIR = SUN_DIR;
   G.FOG_COLOR = FOG_COLOR;
@@ -14226,30 +14418,38 @@ var DWGame = {};
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 0.95;
+    renderer.toneMappingExposure = 0.9;
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     if (container) container.appendChild(renderer.domElement);
 
     var scene = new THREE.Scene();
     scene.background = new THREE.Color(FOG_COLOR);
-    // Exponential haze: ~20% at 150 units (clearly readable), ~65% at the 320 terrain edge,
-    // ~92% at 500; the skirt beyond fully dissolves into the horizon color.
-    scene.fog = new THREE.FogExp2(FOG_COLOR, 0.0032);
+    // Aerial perspective (exp2): successive ridges at ~160 / 320 / 480 units step paler
+    // (~11% / ~36% / ~64% haze); the skirt (to +-1700) dissolves fully (>99%) into the horizon.
+    scene.fog = new THREE.FogExp2(FOG_COLOR, 0.0021);
 
     var sky = buildSky(scene);
 
-    var hemi = new THREE.HemisphereLight(0xdde9f2, 0xc9a874, 0.9);
+    // Low ambient: cool sky fill + warm sand bounce, so shadowed slip faces read violet-brown sand.
+    // r159 (useLegacyLights = false) applies no PI to hemisphere irradiance while Lambert divides by
+    // PI, so "0.45" in legacy units is 0.45*PI here; plain 0.45 crushes slip faces to ~sRGB 36/26/12,
+    // this gives ~92/72/42 (sunlit windward ~207/189/139) after ACES at exposure 0.9.
+    var hemi = new THREE.HemisphereLight(0xbcc6e6, 0xd2a878, 0.45 * Math.PI);
     scene.add(hemi);
-    var sunLight = new THREE.DirectionalLight(0xfff4e2, 3.0);
+    var sunLight = new THREE.DirectionalLight(0xfff2de, 3.4);
     sunLight.castShadow = true;
-    sunLight.shadow.mapSize.set(2048, 2048);
+    var maxTex = (renderer.capabilities && renderer.capabilities.maxTextureSize) || 2048;
+    var shadowMapSize = maxTex >= 4096 ? 4096 : 2048;
+    sunLight.shadow.mapSize.set(shadowMapSize, shadowMapSize);
     var sc = sunLight.shadow.camera;
     sc.left = -SHADOW_HALF; sc.right = SHADOW_HALF; sc.top = SHADOW_HALF; sc.bottom = -SHADOW_HALF;
-    sc.near = 1; sc.far = 520;
+    sc.near = 1; sc.far = SHADOW_FAR;
     sc.updateProjectionMatrix();
-    sunLight.shadow.bias = -0.0006;
-    sunLight.shadow.normalBias = 0.08;
+    // Retuned for ~0.064 (4096) / ~0.13 (2048) unit texels and the deeper frustum; may need
+    // in-browser tuning (acne on long grazing windward ramps vs. peter-panning at crests).
+    sunLight.shadow.bias = -0.0008;
+    sunLight.shadow.normalBias = 0.12;
     scene.add(sunLight);
     scene.add(sunLight.target);
 
@@ -14269,7 +14469,7 @@ var DWGame = {};
       sky.sun2.position.copy(camera.position).addScaledVector(SUN2_DIR, 700);
       sky.glow2.position.copy(sky.sun2.position);
       // Snap focus to shadow texel grid (reduces shimmering a bit).
-      var texel = SHADOW_HALF * 2 / 2048;
+      var texel = SHADOW_HALF * 2 / shadowMapSize;
       var fx = Math.round(focus.x / texel) * texel, fz = Math.round(focus.z / texel) * texel;
       sunLight.target.position.set(fx, focus.y, fz);
       sunLight.position.set(fx + SUN_DIR.x * SHADOW_DIST, focus.y + SUN_DIR.y * SHADOW_DIST, fz + SUN_DIR.z * SHADOW_DIST);
@@ -14387,7 +14587,51 @@ var DWGame = {};
     if (pebbles.instanceColor) pebbles.instanceColor.needsUpdate = true;
     group.add(pebbles);
 
-    return { group: group, pebbles: pebbles };
+    // Human-scale cues: ~40 small dark rock shards/slabs (0.4-1.2 units, flat-shaded, half-buried,
+    // visual only), clustered mostly at dune feet / basins (locally low along the wind axis).
+    var wl = Math.sqrt(C.WIND_X * C.WIND_X + C.WIND_Z * C.WIND_Z) || 1;
+    var wdx = (typeof C.WIND_X === 'number' ? C.WIND_X : 0.8) / wl, wdz = (typeof C.WIND_Z === 'number' ? C.WIND_Z : 0.6) / wl;
+    function lowness(x, z) { // 1 = local minimum along the wind (basin / dune foot), 0 = crest
+      var h = DWPhysics.heightAt(x, z), lo = h, hi = h;
+      for (var k = -2; k <= 2; k++) {
+        if (!k) continue;
+        var sh = DWPhysics.heightAt(x + wdx * k * 40, z + wdz * k * 40);
+        if (sh < lo) lo = sh; if (sh > hi) hi = sh;
+      }
+      return hi - lo < 1 ? 0.5 : (hi - h) / (hi - lo);
+    }
+    var shardGeo = new THREE.DodecahedronGeometry(1, 0);
+    var shardMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.92, metalness: 0, flatShading: true });
+    var NS = 40, shards = new THREE.InstancedMesh(shardGeo, shardMat, NS), ns = 0;
+    var rnd3 = DWPhysics.mulberry32(77031), center = new THREE.Vector3();
+    function placeShard(x, z) {
+      var sz = 0.4 + rnd3() * 0.8;                          // longest extent ~0.4-1.2 (half-size below)
+      var slab = rnd3() < 0.6;                              // flat slabs vs chunky shards
+      s.set(sz * 0.5, sz * (slab ? 0.12 + rnd3() * 0.1 : 0.25 + rnd3() * 0.15), sz * (0.3 + rnd3() * 0.2));
+      e.set((rnd3() - 0.5) * 0.7, rnd3() * Math.PI * 2, (rnd3() - 0.5) * 0.7); q.setFromEuler(e);
+      t.set(x, DWPhysics.heightAt(x, z) - s.y * 0.45, z);   // about half buried
+      m.compose(t, q, s); shards.setMatrixAt(ns, m);
+      col.setHSL(0.07 + rnd3() * 0.03, 0.12 + rnd3() * 0.08, 0.17 + rnd3() * 0.1); shards.setColorAt(ns, col);
+      ns++;
+    }
+    for (var tries = 0; tries < 400 && ns < NS; tries++) {
+      var spot = freeSpot(6.5); if (!spot) continue;  // cluster radius <= 5 + shard size
+      var lw = lowness(spot.x, spot.z);
+      var single = rnd3() < 0.15;                           // a few loners anywhere
+      if (!single && lw < 0.7) continue;
+      center.copy(spot);
+      var cnt = single ? 1 : 3 + Math.floor(rnd3() * 3);
+      for (var j = 0; j < cnt && ns < NS; j++) {
+        var ang2 = rnd3() * Math.PI * 2, rr = j === 0 ? 0 : 1 + rnd3() * 5;
+        placeShard(center.x + Math.cos(ang2) * rr, center.z + Math.sin(ang2) * rr);
+      }
+    }
+    shards.count = ns; shards.castShadow = true; shards.receiveShadow = true;
+    shards.instanceMatrix.needsUpdate = true;
+    if (shards.instanceColor) shards.instanceColor.needsUpdate = true;
+    group.add(shards);
+
+    return { group: group, pebbles: pebbles, shards: shards };
   };
 })(DWGame);
 
@@ -14663,6 +14907,11 @@ var DWGame = {};
           var o = foods[j]; if (o === f) continue;
           if ((o.x - x) * (o.x - x) + (o.z - z) * (o.z - z) < 144) ok = false;
         }
+        var av = (F && F.getAvoid) ? F.getAvoid() : null; // e.g. hazards: keep >= 14 away
+        for (var q = 0; ok && av && q < av.length; q++) {
+          var ai = av[q]; if (!ai || ai.active === false) continue;
+          if ((ai.x - x) * (ai.x - x) + (ai.z - z) * (ai.z - z) < 196) ok = false;
+        }
         if (ok) break;
       }
       f.gold = rnd() < GOLD_CHANCE;
@@ -14703,6 +14952,7 @@ var DWGame = {};
     var F = {
       foods: foods,
       onEat: null, // fn({gold, combo, points, growth, x, y, z, under})
+      getAvoid: null, // fn() -> array of {x, z, active}; food is placed >= 14 from active ones
       respawnAll: function () { for (var k = 0; k < foods.length; k++) place(foods[k], true); },
       eat: function (idx) {
         var f = foods[idx]; if (!f) return;
@@ -15610,6 +15860,246 @@ var DWGame = {};
 })(DWGame);
 
 ;
+// ===== r2c-hazards.js =====
+// r2c-hazards.js — "thorn crystals": non-edible hazards (black obsidian shards, red core).
+// Eating one (head touches it at the surface) costs a life (game loop handles lives).
+(function (G) {
+  'use strict';
+  var U = G.util;
+
+  G.createHazards = function (scene, sim, fx, opts) {
+    opts = opts || {};
+    var C = DWPhysics.CONFIG;
+    var MAX = 26, VARIANTS = 4;
+    var HIT_RADIUS = 1.6;          // item.radius (horizontal, added to HEAD_RADIUS)
+    var HIT_Y_OFF = 1.2;           // vertical hit centre above ground
+    var HIT_Y_EXTRA = 2.5;         // vertical tolerance = HEAD_RADIUS + this
+    var GROW_TIME = 0.8;           // harmless until fully grown
+    var RESPAWN_DELAY = 2.5;
+    var MIN_HEAD = 45, MIN_OTHER = 22, MIN_AVOID = 14, PAD_R = 30, EMBER_R = 120;
+    var RED = 0xff2a12;
+    var rnd = DWPhysics.mulberry32(((C.SEED || 1) * 13 + 4242) >>> 0);
+    var vr = DWPhysics.mulberry32(((C.SEED || 1) * 31 + 77) >>> 0); // geometry variants
+
+    // ---- shared geometry / materials ----
+    var shardMat = new THREE.MeshStandardMaterial({ color: 0x141110, roughness: 0.55, metalness: 0.3, flatShading: true });
+    var coreMat = new THREE.MeshBasicMaterial({ color: RED });
+    var crackMat = new THREE.MeshBasicMaterial({ color: 0xc81a08 });
+    var glowTex = U.radialTexture(128, [[0, 'rgba(255,255,255,1)'], [0.3, 'rgba(255,255,255,0.4)'], [1, 'rgba(255,255,255,0)']]);
+    var glowMat = new THREE.SpriteMaterial({ map: glowTex, color: 0xff3a1c, blending: THREE.AdditiveBlending,
+      depthWrite: false, transparent: true, opacity: 0.7 });
+    var RING_OUT = (C.HEAD_RADIUS || 1.5) + HIT_RADIUS; // honest danger zone for the head centre
+    var ringGeo = new THREE.RingGeometry(RING_OUT - 0.45, RING_OUT, 40).rotateX(-Math.PI / 2);
+    var coreGeo = new THREE.IcosahedronGeometry(0.62, 0);
+
+    var mtx = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler(), v3 = new THREE.Vector3(), sc = new THREE.Vector3();
+    function shardMatrix(az, tilt, len, rad, ox, oz, oy) {
+      e.set(0, 0, 0); q.setFromEuler(e);
+      // tilt outward along azimuth az: rotate around axis perpendicular to (cos az, 0, sin az)
+      v3.set(-Math.sin(az), 0, Math.cos(az));
+      q.setFromAxisAngle(v3, -tilt);
+      sc.set(rad, len, rad);
+      mtx.compose(v3.set(ox, oy, oz), q, sc);
+      return mtx.clone();
+    }
+    var variants = [], crackVariants = [];
+    for (var vi = 0; vi < VARIANTS; vi++) {
+      var parts = [], cparts = [], n = 5 + Math.floor(vr() * 4); // 5..8
+      var cone4 = new THREE.ConeGeometry(1, 1, 4, 1).translate(0, 0.5, 0);
+      var cone5 = new THREE.ConeGeometry(1, 1, 5, 1).translate(0, 0.5, 0);
+      for (var s = 0; s < n; s++) {
+        var az = (s / n) * Math.PI * 2 + vr() * 0.9;
+        var len = s === 0 ? 3.4 + vr() * 0.8 : 1.6 + vr() * 2.6; // 1.6 .. 4.2
+        var tilt = s === 0 ? vr() * 0.15 : 0.15 + vr() * 0.46;   // up to ~35 deg
+        var rad = len * (0.13 + vr() * 0.05);
+        var off = s === 0 ? 0 : 0.25 + vr() * 0.45;
+        parts.push({ geo: vr() < 0.5 ? cone4 : cone5,
+          matrix: shardMatrix(az, tilt, len, rad, Math.cos(az) * off, Math.sin(az) * off, -0.35) });
+        // glowing red "crack" sliver tucked inside the shard base
+        if (s < 4) cparts.push({ geo: cone4,
+          matrix: shardMatrix(az, tilt, len * 0.45, rad * 1.08, Math.cos(az) * off, Math.sin(az) * off, -0.3) });
+      }
+      variants.push(U.mergeGeometries(parts));
+      crackVariants.push(U.mergeGeometries(cparts));
+      cone4.dispose(); cone5.dispose();
+    }
+
+    function makeHazard(i) {
+      var root = new THREE.Group();
+      var grow = new THREE.Group(); root.add(grow);
+      var vIdx = i % VARIANTS;
+      var shards = new THREE.Mesh(variants[vIdx], shardMat);
+      shards.castShadow = true; shards.receiveShadow = true; grow.add(shards);
+      var cracks = new THREE.Mesh(crackVariants[vIdx], crackMat); grow.add(cracks);
+      var core = new THREE.Mesh(coreGeo, coreMat); core.position.y = 0.1; grow.add(core);
+      var glow = new THREE.Sprite(glowMat); glow.position.y = 0.7; glow.scale.set(5, 5, 1); root.add(glow);
+      var ringMat = new THREE.MeshBasicMaterial({ color: RED, transparent: true, opacity: 0.4,
+        blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide,
+        polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
+      var ring = new THREE.Mesh(ringGeo, ringMat); ring.renderOrder = 4; root.add(ring);
+      root.visible = false;
+      scene.add(root);
+      return { x: 0, y: 0, z: 0, radius: HIT_RADIUS, root: root, grow: grow, core: core, glow: glow,
+        ring: ring, ringMat: ringMat, active: false, enabled: false, armed: false, age: 0,
+        respawnT: 0, emberT: 0, phase: rnd() * 6.283, spin: (rnd() - 0.5) * 0.4, index: i };
+    }
+    var items = [];
+    for (var i = 0; i < MAX; i++) items.push(makeHazard(i));
+
+    function head() { return sim && sim.segments && sim.segments[0] ? sim.segments[0] : null; }
+
+    var up = new THREE.Vector3(0, 1, 0), nrm = new THREE.Vector3();
+    // Find a position; scores violations so it always terminates with the best candidate.
+    function place(it) {
+      var R = (C.PLAY_RADIUS || 250) - 20, hd = head(), props = sim.props || [];
+      var hx = 0, hz = 0, hasH = false;
+      if (hd && hd.body) { hx = hd.body.position.x; hz = hd.body.position.z; hasH = true; }
+      var avoid = H.getAvoid ? H.getAvoid() : null;
+      var bx = 0, bz = 0, best = Infinity;
+      for (var t = 0; t < 160; t++) {
+        var a = rnd() * Math.PI * 2, r = Math.sqrt(rnd()) * R;
+        var x = Math.cos(a) * r, z = Math.sin(a) * r, pen = 0, dx, dz, d2;
+        if (hasH) { dx = x - hx; dz = z - hz; d2 = dx * dx + dz * dz; if (d2 < MIN_HEAD * MIN_HEAD) pen += 1000 + (MIN_HEAD - Math.sqrt(d2)) * 10; }
+        for (var k = 0; k < MAX; k++) {
+          var o = items[k]; if (o === it || !o.active) continue;
+          dx = x - o.x; dz = z - o.z; d2 = dx * dx + dz * dz;
+          if (d2 < MIN_OTHER * MIN_OTHER) pen += 300 + (MIN_OTHER - Math.sqrt(d2)) * 10;
+        }
+        if (avoid) {
+          for (k = 0; k < avoid.length; k++) {
+            var av = avoid[k]; if (!av || av.active === false) continue;
+            dx = x - av.x; dz = z - av.z; d2 = dx * dx + dz * dz;
+            if (d2 < MIN_AVOID * MIN_AVOID) pen += 100 + (MIN_AVOID - Math.sqrt(d2)) * 5;
+          }
+        }
+        for (k = 0; k < props.length; k++) {
+          var pr = props[k], rr = (pr.radius || 1) + 4;
+          dx = x - pr.x; dz = z - pr.z;
+          if (dx * dx + dz * dz < rr * rr) pen += 200;
+        }
+        if (r < PAD_R) pen += 20;
+        if (pen < best) { best = pen; bx = x; bz = z; if (pen === 0) break; }
+      }
+      it.x = bx; it.z = bz; it.y = DWPhysics.heightAt(bx, bz);
+      it.root.position.set(bx, it.y, bz);
+      it.root.rotation.set(0, 0, 0);
+      it.grow.rotation.y = rnd() * 6.283;
+      // ring hugs the terrain: tilt to the finite-difference normal
+      var ep = 0.6;
+      var gx = (DWPhysics.heightAt(bx + ep, bz) - DWPhysics.heightAt(bx - ep, bz)) / (2 * ep);
+      var gz = (DWPhysics.heightAt(bx, bz + ep) - DWPhysics.heightAt(bx, bz - ep)) / (2 * ep);
+      nrm.set(-gx, 1, -gz).normalize();
+      it.ring.quaternion.setFromUnitVectors(up, nrm);
+      it.ring.position.set(0, 0.12, 0);
+      it.active = true; it.armed = false; it.age = 0; it.respawnT = 0;
+      it.grow.scale.set(1, 0.001, 1);
+      it.root.visible = true;
+    }
+
+    // preallocated burst options
+    var DEBRIS = { speed: [3, 9], up: [3, 9], life: [0.6, 1.2], size: [0.5, 1.1], alpha: 0.9, color: 0x1a1412, gravity: -18, drag: 1.2, spread: 1.2 };
+    var SMOKE = { speed: [0.8, 2.5], up: [1, 3], life: [1.2, 2.0], size: [1.6, 2.8], alpha: 0.45, color: 0x2a201c, grow: 1.5, drag: 1.5, spread: 1.5 };
+    var EMBERS = { speed: [3, 8], up: [4, 10], life: [0.5, 1.1], size: [0.4, 0.8], alpha: 1, color: 0xff3a1a, gravity: -14, drag: 1.2, spread: 0.8 };
+    var info = { x: 0, y: 0, z: 0, index: -1 };
+
+    function hitFx(it) {
+      if (!fx) return;
+      var cy = it.y + HIT_Y_OFF;
+      if (fx.dust) { fx.dust.burst(it.x, cy, it.z, 40, DEBRIS); fx.dust.burst(it.x, it.y + 0.4, it.z, 18, SMOKE); }
+      if (fx.sparks) fx.sparks.burst(it.x, cy, it.z, 24, EMBERS);
+      if (fx.rings) fx.rings.spawn(it.x, it.y, it.z, RED, 10);
+    }
+
+    var H = {
+      items: items,
+      MAX: MAX,
+      onHit: null,
+      getAvoid: null,
+      setCount: function (n) {
+        n = Math.max(0, Math.min(MAX, n | 0));
+        for (var k = 0; k < MAX; k++) {
+          var it = items[k];
+          if (k < n) {
+            if (!it.enabled) { it.enabled = true; place(it); }
+          } else if (it.enabled) {
+            it.enabled = false; it.active = false; it.armed = false; it.respawnT = 0; it.root.visible = false;
+          }
+        }
+      },
+      respawnAll: function () {
+        var k;
+        for (k = 0; k < MAX; k++) { items[k].active = false; items[k].armed = false; items[k].root.visible = false; items[k].respawnT = 0; }
+        for (k = 0; k < MAX; k++) if (items[k].enabled) place(items[k]);
+      },
+      hit: function (k) {
+        var it = items[k]; if (!it || !it.active) return;
+        it.active = false; it.armed = false; it.root.visible = false;
+        it.respawnT = RESPAWN_DELAY;
+        info.x = it.x; info.y = it.y; info.z = it.z; info.index = k;
+        hitFx(it);
+        if (H.onHit) H.onHit(info);
+      },
+      update: function (dt, time, canHit) {
+        dt = dt > 0 ? dt : 0; time = time || 0;
+        var hd = head(), hx = 0, hy = 0, hz = 0, hUnder = true;
+        if (hd && hd.body) { hx = hd.body.position.x; hy = hd.body.position.y; hz = hd.body.position.z; hUnder = !!hd.under; }
+        var HR = C.HEAD_RADIUS || 1.5, hitDone = false;
+        for (var k = 0; k < MAX; k++) {
+          var it = items[k];
+          if (!it.enabled) continue;
+          if (!it.active) {
+            if (it.respawnT > 0) { it.respawnT -= dt; if (it.respawnT <= 0) place(it); }
+            continue;
+          }
+          it.age += dt;
+          var g = Math.min(1, it.age / GROW_TIME), eo = 1 - (1 - g) * (1 - g) * (1 - g);
+          it.armed = it.age >= GROW_TIME;
+          it.grow.scale.set(0.55 + 0.45 * eo, Math.max(eo, 0.001), 0.55 + 0.45 * eo);
+          var ph = time * 2.1 + it.phase, p = 0.5 + 0.5 * Math.sin(ph);
+          var cs = 0.85 + 0.3 * p; it.core.scale.set(cs, cs, cs);
+          it.core.rotation.y += it.spin * dt;
+          var gs = (4.2 + 1.6 * p) * eo; it.glow.scale.set(gs + 0.001, gs + 0.001, 1);
+          it.ringMat.opacity = (0.25 + 0.35 * (0.5 + 0.5 * Math.sin(time * 1.6 + it.phase * 1.3))) * eo;
+          var dx = it.x - hx, dz = it.z - hz, d2 = dx * dx + dz * dz;
+          // idle embers / smoke near the player
+          if (fx && dt > 0 && d2 < EMBER_R * EMBER_R) {
+            it.emberT -= dt;
+            if (it.emberT <= 0) {
+              it.emberT = 0.9 + rnd() * 1.6;
+              var ea = rnd() * 6.283, er = rnd() * 0.9;
+              if (fx.sparks) fx.sparks.emit(it.x + Math.cos(ea) * er, it.y + 0.5, it.z + Math.sin(ea) * er,
+                (rnd() - 0.5) * 0.6, 1.6 + rnd() * 1.4, (rnd() - 0.5) * 0.6, 1.2 + rnd() * 0.8, 0.3 + rnd() * 0.2, 0.9, 0xff4a1a, -0.4, 0.2, 0.6);
+              if (fx.dust && rnd() < 0.5) fx.dust.emit(it.x, it.y + 0.8, it.z,
+                (rnd() - 0.5) * 0.4, 1.0 + rnd() * 0.8, (rnd() - 0.5) * 0.4, 1.8 + rnd(), 1.2 + rnd() * 0.6, 0.3, 0x1e1816, 1.4, 0, 0.5);
+            }
+          }
+          // hit: mouth only, surface only, armed only
+          if (canHit && it.armed && !hitDone && hd && !hUnder) {
+            var rr = HR + it.radius;
+            if (d2 < rr * rr && Math.abs(hy - (it.y + HIT_Y_OFF)) < HR + HIT_Y_EXTRA) {
+              hitDone = true;
+              H.hit(k);
+            }
+          }
+        }
+      },
+      nearestDistance: function () {
+        var hd = head(); if (!hd || !hd.body) return Infinity;
+        var hx = hd.body.position.x, hz = hd.body.position.z, best = Infinity;
+        for (var k = 0; k < MAX; k++) {
+          var it = items[k]; if (!it.active) continue;
+          var dx = it.x - hx, dz = it.z - hz, d2 = dx * dx + dz * dz;
+          if (d2 < best) best = d2;
+        }
+        return Math.sqrt(best);
+      }
+    };
+    if (opts.count) H.setCount(opts.count);
+    return H;
+  };
+})(DWGame);
+
+;
 // ===== r3-main.js =====
 // r3-main.js — input, camera, UI/state machine, main loop, error handling, boot.
 (function (G) {
@@ -15665,7 +16155,7 @@ var DWGame = {};
     var gameEl = $('game');
     var world = G.createWorld(gameEl, sim);
     var renderer = world.renderer, scene = world.scene;
-    var camera = new THREE.PerspectiveCamera(60, window.innerWidth / Math.max(1, window.innerHeight), 0.5, 6000);
+    var camera = new THREE.PerspectiveCamera(52, window.innerWidth / Math.max(1, window.innerHeight), 0.5, 6000);
 
     var worm = G.createWorm(scene, sim);
     var fx = {
@@ -15674,6 +16164,16 @@ var DWGame = {};
       rings: G.createRings(scene, 6)
     };
     var food = G.createFood(scene, sim, fx);
+    var hazards = G.createHazards(scene, sim, fx);
+    var hazardFoods = function () { return food.foods; };
+    var hazardItems = function () { return hazards.items; };
+    hazards.getAvoid = hazardFoods;
+    food.getAvoid = hazardItems;
+    var hazardCount = -1;
+    function setHazardCount(n) {
+      n = Math.min(hazards.MAX, n);
+      if (n !== hazardCount) { hazardCount = n; hazards.setCount(n); }
+    }
     var bulge = G.createBulge(scene, sim, fx);
     var floaters = G.createFloaters($('floaters'));
 
@@ -15684,9 +16184,13 @@ var DWGame = {};
     var el = {
       hud: $('hud'), len: $('len'), score: $('score'), best: $('best'), hint: $('hint'), flash: $('flash'),
       arrow: $('arrow'), start: $('startScreen'), startBtn: $('startBtn'), pause: $('pauseScreen'),
-      vignette: $('vignette'), status: $('status')
+      vignette: $('vignette'), status: $('status'), lives: $('lives'), hurt: $('hurt'),
+      over: $('gameOverScreen'), goScore: $('goScore'), goLength: $('goLength'), goBest: $('goBest'),
+      goNew: $('goNew'), goBtn: $('goBtn')
     };
     var state = 'menu', score = 0, best = 0;
+    var MAX_LIVES = 3, lives = MAX_LIVES, invuln = 0, runStartBest = 0;
+    var overT = -1, overShown = false; // visTime at which the game-over overlay appears
     try { best = parseInt(window.localStorage.getItem(BEST_KEY), 10) || 0; } catch (e) { best = 0; }
     var shown = { len: -1, score: -1, best: -1 };
     function setText(node, key, v) {
@@ -15716,11 +16220,17 @@ var DWGame = {};
         cueVig = under;
         if (el.vignette) { if (under) el.vignette.classList.add('on'); else el.vignette.classList.remove('on'); }
       }
-      var st = under && state !== 'menu';
+      var st = '';
+      if (state === 'playing') {
+        var full = sim.fullySubmerged != null ? !!sim.fullySubmerged : (sim.submerged || 0) >= 0.999;
+        if (sim.mode === 'emerging') st = 'SURFACING';
+        else if (full) st = 'BURROWED';
+        else if (under) st = 'DIVING';
+      }
       if (st !== cueStatus) {
         cueStatus = st;
         if (el.status) {
-          if (st) { el.status.textContent = 'BURROWED'; el.status.classList.add('on'); }
+          if (st) { el.status.textContent = st; el.status.classList.add('on'); }
           else el.status.classList.remove('on');
         }
       }
@@ -15730,7 +16240,8 @@ var DWGame = {};
       setText(el.score, 'score', score);
       setText(el.best, 'best', best);
     }
-    if ('ontouchstart' in window && el.hint) el.hint.textContent = 'Drag to steer \u00b7 hold BURROW to dive';
+    var TOUCH_HINT = 'Drag to steer \u00b7 hold BURROW to dive \u00b7 avoid red thorns';
+    if ('ontouchstart' in window && el.hint) el.hint.textContent = TOUCH_HINT;
 
     // ---------------- Input ----------------
     var keys = {}, mouseX = 0, mouseActive = false, touchId = null, touchStartX = 0, touchTurn = 0, touching = false;
@@ -15745,12 +16256,14 @@ var DWGame = {};
       keys[c] = true;
       if (STEER_KEYS[c]) mouseActive = false;
       if (e.repeat) return;
-      if (c === 'Escape' || c === 'KeyP') { if (state !== 'menu') togglePause(); }
+      if (c === 'Escape' || c === 'KeyP') { if (state === 'playing' || state === 'paused') togglePause(); }
       else if (c === 'KeyR') { if (state !== 'menu') restart(); }
       else if (c === 'Enter') {
         if (state === 'menu') start(); else if (state === 'paused') togglePause();
+        else if (state === 'gameover') restart();
       } else if (c === 'Space') {
         if (state === 'menu') { start(); spaceArmed = false; } // the starting press must not dive
+        else if (state === 'gameover' && overShown) { restart(); spaceArmed = false; }
       }
     }, { passive: false });
     window.addEventListener('keyup', function (e) {
@@ -15775,7 +16288,7 @@ var DWGame = {};
     function markTouch() {
       if (document.body && !document.body.classList.contains('touch')) {
         document.body.classList.add('touch');
-        if (el.hint) el.hint.textContent = 'Drag to steer \u00b7 hold BURROW to dive';
+        if (el.hint) el.hint.textContent = TOUCH_HINT;
       }
     }
     if ('ontouchstart' in window) markTouch();
@@ -15834,6 +16347,7 @@ var DWGame = {};
 
     if (el.start) el.start.addEventListener('click', function () { if (state === 'menu') start(); });
     if (el.pause) el.pause.addEventListener('click', function () { if (state === 'paused') togglePause(); });
+    if (el.over) el.over.addEventListener('click', function () { if (state === 'gameover' && overShown) restart(); });
 
     // Returns "steer right" amount in [-1,1] (positive = toward screen-right).
     function steerRight() {
@@ -15860,14 +16374,20 @@ var DWGame = {};
       sim.reset();
       bulge.reset();
       score = 0;
+      lives = MAX_LIVES; invuln = 0;
+      updateLivesHud();
+      hazardCount = 12; hazards.setCount(12);
+      hazards.respawnAll();
       food.respawnAll();
+      runStartBest = best;
       fx.dust.clear(); fx.sparks.clear();
       fovKick = 0;
       updateHud();
     }
     function start() {
       if (state !== 'menu' || G._dead) return;
-      show(el.start, false); show(el.pause, false); show(el.hud, true);
+      show(el.start, false); show(el.pause, false); show(el.hud, true); show(el.over, false);
+      overShown = false;
       clearInput();
       mouseActive = false;
       resetGame();
@@ -15879,7 +16399,10 @@ var DWGame = {};
     }
     function restart() {
       if (state === 'menu') return;
-      show(el.pause, false);
+      if (state === 'gameover' && !overShown) return;
+      show(el.pause, false); show(el.over, false);
+      overShown = false;
+      clearInput();
       resetGame();
       state = 'playing';
     }
@@ -15903,8 +16426,47 @@ var DWGame = {};
       floaters.spawn(text, cls, info.x, info.y + 1.8, info.z, camera, window.innerWidth, window.innerHeight);
     };
 
+    function retrigger(node, cls) {
+      if (!node) return;
+      node.classList.remove(cls); void node.offsetWidth; node.classList.add(cls);
+    }
+    function updateLivesHud() {
+      var ch = el.lives && el.lives.children;
+      if (!ch || !ch.length) return;
+      for (var i = 0; i < ch.length; i++) {
+        if (!ch[i] || !ch[i].classList) continue;
+        if (i < lives) ch[i].classList.remove('lost'); else ch[i].classList.add('lost');
+      }
+    }
+    hazards.onHit = function (info) {
+      if (state !== 'playing' || invuln > 0) return;
+      var hx = info.x, hy = info.y, hz = info.z;
+      lives -= 1;
+      invuln = 2.0;
+      updateLivesHud();
+      retrigger(el.lives, 'hit');
+      retrigger(el.hurt, 'on');
+      shake = Math.max(shake, 0.8);
+      floaters.spawn('−1 LIFE', 'bad', hx, hy + 2, hz, camera, window.innerWidth, window.innerHeight);
+      eatPulse = 1;
+      if (lives <= 0) gameOver();
+    };
+    function gameOver() {
+      if (state !== 'playing') return;
+      state = 'gameover';
+      saveBest();
+      if (el.goScore) el.goScore.textContent = String(score);
+      if (el.goLength) el.goLength.textContent = String(sim.length | 0);
+      if (el.goBest) el.goBest.textContent = String(best);
+      show(el.goNew, score > runStartBest);
+      clearInput();
+      setBtnDive(false);
+      overT = visTime + 1.2;
+      overShown = false;
+    }
+
     // ---------------- Camera ----------------
-    var fovKick = 0, boostFov = 0, curFov = 60;
+    var fovKick = 0, boostFov = 0, curFov = 52;
     var camHeading = sim.heading || 0, orbitA = 0;
     var headV = new THREE.Vector3(), desired = new THREE.Vector3(), lookAt = new THREE.Vector3();
     var lookTarget = new THREE.Vector3(), tmpV = new THREE.Vector3(), camFwd = new THREE.Vector3();
@@ -15923,17 +16485,18 @@ var DWGame = {};
     camera.position.copy(camPos);
     lookAt.copy(focus);
 
-    // Raise `desired` so the camera->focus sight line clears the dunes by >= 1.5.
-    function clearSightLine(d, f) {
-      var minY = DWPhysics.heightAt(d.x, d.z) + 2.5;
-      if (d.y < minY) d.y = minY;
-      for (var i = 1; i <= 3; i++) {
-        var t = i / 4;
+    // Lift needed so the camera->focus sight line clears the dunes by >= 1.5 (4 samples).
+    var losLift = 0;
+    function sightLift(d, f) {
+      var y = d.y;
+      for (var i = 1; i <= 4; i++) {
+        var t = i / 5;
         var px = d.x + (f.x - d.x) * t, pz = d.z + (f.z - d.z) * t;
         var need = DWPhysics.heightAt(px, pz) + 1.5;
-        var lineY = d.y + (f.y - d.y) * t;
-        if (lineY < need) d.y = Math.max(d.y, (need - f.y * t) / (1 - t));
+        var lineY = y + (f.y - y) * t;
+        if (lineY < need) y = Math.max(y, (need - f.y * t) / (1 - t));
       }
+      return y - d.y;
     }
 
     function updateCamera(dt) {
@@ -15945,15 +16508,20 @@ var DWGame = {};
       underBlend += ((under ? 1 : 0) - underBlend) * U.damp(dt, 2.5);
       if (state === 'menu') {
         orbitA += dt * 0.18;
-        desired.set(focus.x + Math.sin(orbitA) * 38, focus.y + 16, focus.z + Math.cos(orbitA) * 38);
-        lookTarget.set(focus.x, focus.y + 1.5, focus.z);
+        desired.set(focus.x + Math.sin(orbitA) * 46, focus.y + 13, focus.z + Math.cos(orbitA) * 46);
+        lookTarget.set(focus.x, focus.y + 3, focus.z);
       } else {
-        var back = 26 + Math.min(0.12 * nSeg, 12) - 3 * underBlend;
-        var up = 13 + Math.min(0.05 * nSeg, 5) + 4 * underBlend;
+        var back = 34 + Math.min(0.14 * nSeg, 14) - 4 * underBlend;
+        var up = 8.5 + Math.min(0.05 * nSeg, 5) + 5 * underBlend;
         desired.set(focus.x - fx0 * back, focus.y + up, focus.z - fz0 * back);
-        lookTarget.set(focus.x + fx0 * 7, focus.y + 1.5, focus.z + fz0 * 7);
+        lookTarget.set(focus.x + fx0 * 16, focus.y + 3.5, focus.z + fz0 * 16);
+        // Just after a breach: blend the look target toward the head's real (airborne) position.
+        var sinceBr = (sim.time || 0) - (sim.lastBreachTime != null ? sim.lastBreachTime : -1e9);
+        if (sinceBr >= 0 && sinceBr < 0.8) lookTarget.lerp(headV, 0.6 * (1 - sinceBr / 0.8));
       }
-      clearSightLine(desired, focus);
+      var liftNeed = sightLift(desired, focus);
+      losLift += (liftNeed - losLift) * U.damp(dt, 3);
+      desired.y += Math.max(0, losLift);
       var k = U.damp(dt, state === 'menu' ? 2 : 4.5);
       camPos.lerp(desired, k);
       var minY = DWPhysics.heightAt(camPos.x, camPos.z) + 2.5;
@@ -15975,7 +16543,7 @@ var DWGame = {};
       fovKick *= Math.exp(-4 * dt);
       var bt = (state === 'playing' && speedMul() > 1) ? 4 : 0;
       boostFov += (bt - boostFov) * U.damp(dt, 3);
-      var f = 60 + fovKick + boostFov;
+      var f = 52 + fovKick + boostFov;
       if (Math.abs(f - curFov) > 0.01) { curFov = f; camera.fov = f; camera.updateProjectionMatrix(); }
       renderer.getDrawingBufferSize(bufSize);
       var sc = bufSize.y / (2 * Math.tan(camera.fov * Math.PI / 360));
@@ -16112,12 +16680,23 @@ var DWGame = {};
         } else if (state === 'menu') {
           // showcase: gentle circle with an automatic dive cycle (dive held 3.5 s of every 10 s)
           sim.step(dt, { turn: 0.18, speedMul: 0.7, dive: (visTime % 10) >= 6.5 });
+        } else if (state === 'gameover') {
+          sim.step(dt, { turn: 0.12, speedMul: 0.6, dive: true }); // the worm sinks into the sand
         }
         if (state !== 'paused') impactFx();
         var vdt = state === 'paused' ? 0 : dt;
         visTime += vdt;
+        if (state === 'playing') {
+          if (invuln > 0) invuln = Math.max(0, invuln - vdt);
+          setHazardCount(12 + Math.floor(score / 150));
+        } else if (state === 'menu') setHazardCount(8);
+        if (state === 'gameover' && !overShown && visTime >= overT) {
+          overShown = true;
+          show(el.over, true);
+        }
         if (vdt > 0) {
           emitDust(vdt);
+          hazards.update(vdt, visTime, state === 'playing' && invuln <= 0);
           food.update(vdt, visTime, state === 'playing');
           fx.dust.update(vdt); fx.sparks.update(vdt); fx.rings.update(vdt);
           bulge.update(vdt, visTime);
@@ -16159,6 +16738,10 @@ var DWGame = {};
     G.forceEat = function (i) { food.eat(i | 0); };
     G.STEER_SIGN = STEER_SIGN;
     G.bulge = bulge;
+    G.lives = function () { return lives; };
+    G.hazards = hazards;
+    G.invuln = function () { return invuln; };
+    G.gameOver = gameOver;
     G.input = function () { return { dive: diveHeld(), turn: steerRight() }; };
 
     G._running = true;
